@@ -11,3 +11,7 @@ export function isArray( thing ) {
 export function isString ( thing ) {
 	return typeof thing === 'string';
 }
+
+export function isObject( thing ) {
+	return typeof thing === 'object';
+}

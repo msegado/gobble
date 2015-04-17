@@ -3,7 +3,7 @@ import * as sander from 'sander';
 import getNode from './utils/getNode';
 import config from './config';
 
-var gobble = ( inputs, options ) => getNode( inputs, options );
+var gobble = ( ...parts ) => getNode( parts );
 
 gobble.env = function ( env ) {
 	if ( arguments.length ) {

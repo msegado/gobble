@@ -14,7 +14,8 @@ import compareBuffers from '../utils/compareBuffers';
 import serve from './serve';
 import build from './build';
 import watch from './watch';
-import { isRegExp } from '../utils/is';
+import { isRegExp, isString } from '../utils/is';
+import argsAndOpts from '../utils/argsAndOpts';
 import { ABORTED } from '../utils/signals';
 
 export default class Node extends EventEmitter2 {
@@ -109,9 +110,11 @@ export default class Node extends EventEmitter2 {
 		return watchTask;
 	}
 
-	exclude ( patterns ) {
-		if ( typeof patterns === 'string' ) { patterns = [ patterns ]; }
-		return new Transformer( this, include, { patterns, exclude: true });
+	exclude ( ...parts ) {
+		let [ patterns, opts ] = argsAndOpts( parts, true );
+		opts.patterns = patterns;
+		opts.exclude = true;
+		return new Transformer( this, include, opts );
 	}
 
 	getChanges ( inputdir ) {
@@ -147,15 +150,17 @@ export default class Node extends EventEmitter2 {
 		return added.concat( removed ).concat( changed );
 	}
 
-	grab () {
-		const src = join.apply( null, arguments );
-		return new Transformer( this, grab, { src });
+	grab ( ...parts ) {
+		let [ path, opts ] = argsAndOpts( parts );
+		opts.src = join.apply( null, path );
+		return new Transformer( this, grab, opts );
 	}
 
 	// Built-in transformers
-	include ( patterns ) {
-		if ( typeof patterns === 'string' ) { patterns = [ patterns ]; }
-		return new Transformer( this, include, { patterns });
+	include ( ...parts ) {
+		let [ patterns, opts ] = argsAndOpts( parts, true );
+		opts.patterns = patterns;
+		return new Transformer( this, include, opts );
 	}
 
 	inspect ( target, options ) {
@@ -174,13 +179,14 @@ export default class Node extends EventEmitter2 {
 		return this.transform( fn, userOptions );
 	}
 
-	moveTo () {
-		const dest = join.apply( null, arguments );
-		return new Transformer( this, move, { dest });
+	moveTo ( ...parts ) {
+		let [ path, opts ] = argsAndOpts( parts );
+		opts.dest = join.apply( null, path );
+		return new Transformer( this, move, opts );
 	}
 
 	observe ( fn, userOptions ) {
-		if ( typeof fn === 'string' ) {
+		if ( isString( fn ) ) {
 			fn = tryToLoad( fn );
 		}
 

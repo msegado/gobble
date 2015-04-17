@@ -557,6 +557,8 @@ module.exports = function () {
 
 			var source = gobble( 'tmp/foo' );
 
+			this.timeout( 5000 );
+
 			task = source.observe( function ( inputdir, options, done ) {
 				observed += 1;
 				done();
