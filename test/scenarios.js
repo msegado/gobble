@@ -267,7 +267,7 @@ module.exports = function () {
 
 				source = gobble( 'tmp/foo' );
 
-				task = gobble([ source, source ]).serve();
+				task = gobble( source, source ).serve();
 
 				task.once( 'ready', function () {
 					task.once( 'built', function () {

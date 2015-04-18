@@ -10,7 +10,7 @@ let sources = {};
 export default getNode;
 
 function getNode ( parts ) {
-	let [ inputs, options ] = argsAndOpts( parts, true );
+	let [ inputs, options ] = argsAndOpts( parts, true, obj => !obj._gobble );
 
 	if ( inputs.length === 1 ) {
 		if ( inputs[0]._gobble ) {
