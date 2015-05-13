@@ -1,5 +1,5 @@
 import { basename, relative, resolve } from 'path';
-import { link, linkSync, mkdirSync, statSync, Promise } from 'sander';
+import { symlinkOrCopy, symlinkOrCopySync, mkdirSync, statSync, Promise } from 'sander';
 import { watch } from 'graceful-chokidar';
 import * as debounce from 'debounce';
 import Node from './Node';
@@ -64,7 +64,7 @@ export default class Source extends Node {
 
 		// make sure the file is in the appropriate target directory to start
 		if ( this.file ) {
-			linkSync( this.file ).to( this.targetFile );
+			symlinkOrCopySync( this.file ).to( this.targetFile );
 		}
 
 		let changes = [];
@@ -105,7 +105,7 @@ export default class Source extends Node {
 			this._fileWatcher = watch( this.file, options );
 
 			this._fileWatcher.on( 'change', () => {
-				link( this.file ).to( this.targetFile );
+				symlinkOrCopy( this.file ).to( this.targetFile );
 			});
 		}
 	}
